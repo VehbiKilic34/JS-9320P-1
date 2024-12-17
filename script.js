@@ -153,6 +153,7 @@ const toggleCharacters = () => {
   } else {
     row.innerHTML = "";
     renderBtn.textContent = "Show Characters";
+    clearRadioSelection()
   }
 };
 
@@ -172,10 +173,36 @@ homeworldFiltersContainer.innerHTML = homeworlds.map(
 
 };
 
+const filterCharactersByHomeworld = (homeworld) => {
+  const filteredCharacters = dataSet.filter((character) => {
+    const characterHomeworld = character.homeworld ?? "other"
+    return characterHomeworld === homeworld
+  });
+  renderCharacters(filteredCharacters);
+  console.log(filteredCharacters);
+};
+
+const addHomeworldFilterListeners = () => {
+const checkInputs = document.querySelectorAll(".form-check-input")
+checkInputs.forEach((input) => {
+  input.addEventListener("click", () =>
+  filterCharactersByHomeworld(input.value)
+);
+});
+};
+
+const clearRadioSelection = () => {
+  const checkInputs = document.querySelectorAll(".form-check-input")
+  checkInputs.forEach((input)=>{
+    input.checked = false;
+  });
+};
+
 
 
 document.addEventListener ("DOMContentLoaded", () => {
   renderBtn.addEventListener("click", toggleCharacters);
   const uniqueHomeworlds = getUniqueHomeworlds(dataSet);
   createHomeworldFilters(uniqueHomeworlds); 
+  addHomeworldFilterListeners()
 });
